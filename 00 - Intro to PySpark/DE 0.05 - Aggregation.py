@@ -82,7 +82,7 @@ display(event_counts_df)
 
 # COMMAND ----------
 
-avg_state_purchases_df = df.groupBy("geo.state").avg("ecommerce.purchase_revenue_in_usd")
+avg_state_purchases_df = df.groupBy("geo.state", "geo.city").avg("ecommerce.purchase_revenue_in_usd")
 display(avg_state_purchases_df)
 
 # COMMAND ----------
@@ -93,6 +93,14 @@ display(avg_state_purchases_df)
 # COMMAND ----------
 
 city_purchase_quantities_df = df.groupBy("geo.state", "geo.city").sum("ecommerce.total_item_quantity", "ecommerce.purchase_revenue_in_usd")
+display(city_purchase_quantities_df)
+
+# COMMAND ----------
+
+from pyspark.sql.functions import avg
+
+city_purchase_quantities_df = df.groupBy("geo.state", "geo.city").agg(avg("ecommerce.purchase_revenue_in_usd").alias("average_purchase_revenue"))
+
 display(city_purchase_quantities_df)
 
 # COMMAND ----------

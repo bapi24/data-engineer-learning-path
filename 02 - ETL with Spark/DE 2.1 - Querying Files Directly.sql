@@ -118,14 +118,18 @@ SELECT * FROM json.`${DA.paths.kafka_events}/001.json`
 
 -- COMMAND ----------
 
-SELECT * FROM json.`${DA.paths.kafka_events}`
-
--- COMMAND ----------
-
 -- MAGIC %md
 -- MAGIC 
 -- MAGIC 
 -- MAGIC By default, this query will only show the first 1000 rows.
+
+-- COMMAND ----------
+
+SELECT * FROM json.`${DA.paths.kafka_events}`
+
+-- COMMAND ----------
+
+SELECT count(*) FROM json.`${DA.paths.kafka_events}/001.json`
 
 -- COMMAND ----------
 
@@ -191,7 +195,7 @@ SELECT * FROM cte_json
 
 -- COMMAND ----------
 
--- SELECT COUNT(*) FROM cte_json
+SELECT COUNT(*) FROM cte_json
 
 -- COMMAND ----------
 
@@ -213,7 +217,7 @@ SELECT * FROM text.`${DA.paths.kafka_events}`
 -- MAGIC 
 -- MAGIC ## Extract the Raw Bytes and Metadata of a File
 -- MAGIC 
--- MAGIC Some workflows may require working with entire files, such as when dealing with images or unstructured data. Using **`binaryFile`** to query a directory will provide file metadata alongside the binary representation of the file contents.
+-- MAGIC Some workflows may require working with entire files, such as when dealing with images or unstructured data. Using **`binaryFile`** to query a directory will provide file metadata alongside the binary representation of the file contents.#NOTE #EXAM_TIPS
 -- MAGIC 
 -- MAGIC Specifically, the fields created will indicate the **`path`**, **`modificationTime`**, **`length`**, and **`content`**.
 

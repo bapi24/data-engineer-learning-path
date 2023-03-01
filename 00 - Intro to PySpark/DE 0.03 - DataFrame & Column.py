@@ -185,6 +185,7 @@ display(mobile_df)
 
 # COMMAND ----------
 
+events_df.printSchema()
 purchase_quantity_df = events_df.withColumn("purchase_quantity", col("ecommerce.total_item_quantity").cast("int"))
 purchase_quantity_df.printSchema()
 
@@ -239,6 +240,7 @@ display(events_df.distinct())
 # COMMAND ----------
 
 distinct_users_df = events_df.dropDuplicates(["user_id"])
+# events_df.select("user_id").distinct() == distinct_users_df
 display(distinct_users_df)
 
 # COMMAND ----------

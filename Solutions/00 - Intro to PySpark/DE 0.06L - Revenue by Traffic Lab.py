@@ -93,6 +93,18 @@ display(top_traffic_df)
 
 # COMMAND ----------
 
+traffic_df.createOrReplaceTempView("traffic_df")
+top_traffic_df = spark.sql("""
+SELECT *
+from traf
+""")
+
+# COMMAND ----------
+
+
+
+# COMMAND ----------
+
 # MAGIC %md **2.1: CHECK YOUR WORK**
 
 # COMMAND ----------

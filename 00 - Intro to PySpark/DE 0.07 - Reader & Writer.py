@@ -172,6 +172,8 @@ events_df = (spark
             .json(DA.paths.events_json)
            )
 
+display(events_df)
+
 # COMMAND ----------
 
 # MAGIC %md You can use the **`StructType`** Scala method **`toDDL`** to have a DDL-formatted string created for you.
