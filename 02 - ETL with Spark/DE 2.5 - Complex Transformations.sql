@@ -96,7 +96,7 @@ SELECT * FROM events_strings WHERE value:event_name = "finalize" ORDER BY key LI
 -- COMMAND ----------
 
 -- MAGIC %md
--- MAGIC Let's use the JSON string example above to derive the schema, then parse the entire JSON column into struct types.
+-- MAGIC Let's use the JSON string example above to derive the schema, then parse the entire JSON column into struct types. #NOTE #EXAM_TIP
 -- MAGIC - **`schema_of_json()`** returns the schema derived from an example JSON string.
 -- MAGIC - **`from_json()`** parses a column containing a JSON string into a struct type using the specified schema.
 -- MAGIC 
@@ -135,7 +135,7 @@ SELECT * FROM parsed_events
 -- MAGIC %md
 -- MAGIC ### Manipulate Arrays
 -- MAGIC 
--- MAGIC Spark SQL has a number of functions for manipulating array data, including the following:
+-- MAGIC Spark SQL has a number of functions for manipulating array data, including the following: #NOTE #EXAM_TIP #REVIEW
 -- MAGIC - **`explode()`** separates the elements of an array into multiple rows; this creates a new row for each element.
 -- MAGIC - **`size()`** provides a count for the number of elements in an array for each row.
 -- MAGIC 
@@ -151,6 +151,14 @@ SELECT * FROM exploded_events WHERE size(items) > 2
 
 -- COMMAND ----------
 
+SELECT count(items) from parsed_events;
+
+-- COMMAND ----------
+
+SELECT count(*) from exploded_events
+
+-- COMMAND ----------
+
 -- MAGIC %python
 -- MAGIC from pyspark.sql.functions import explode, size
 -- MAGIC 
@@ -159,6 +167,10 @@ SELECT * FROM exploded_events WHERE size(items) > 2
 -- MAGIC )
 -- MAGIC 
 -- MAGIC display(exploded_eventsDF.where(size("items") > 2))
+
+-- COMMAND ----------
+
+DESCRIBE parsed_events
 
 -- COMMAND ----------
 
@@ -233,6 +245,21 @@ SELECT * FROM item_purchases
 -- MAGIC )
 -- MAGIC 
 -- MAGIC display(item_purchasesDF)
+
+-- COMMAND ----------
+
+-- MAGIC %scala
+-- MAGIC import org.apache.spark.sql.functions.{explode, col}
+-- MAGIC 
+-- MAGIC val sales = spark.table("sales")
+-- MAGIC val item_lookup = spark.table("item_lookup")
+-- MAGIC 
+-- MAGIC val item_purchases = sales
+-- MAGIC   .select(col("*"), explode(col("items")).alias("item"))
+-- MAGIC   .join(item_lookup, Seq("item_id"))
+-- MAGIC   .createOrReplaceTempView("item_purchases")
+-- MAGIC 
+-- MAGIC val result = spark.sql("SELECT * FROM item_purchases")
 
 -- COMMAND ----------
 

@@ -105,6 +105,10 @@ LOCATION "${DA.paths.sales_csv}"
 
 -- COMMAND ----------
 
+select * from sales_csv
+
+-- COMMAND ----------
+
 -- MAGIC %md **NOTE:** To create a table against an external source in PySpark, you can wrap this SQL code with the **`spark.sql()`** function.
 
 -- COMMAND ----------
@@ -145,7 +149,7 @@ SELECT COUNT(*) FROM sales_csv
 -- MAGIC %md
 -- MAGIC 
 -- MAGIC 
--- MAGIC All the metadata and options passed during table declaration will be persisted to the metastore, ensuring that data in the location will always be read with these options.
+-- MAGIC All the metadata and options passed during table declaration will be persisted to the metastore, ensuring that data in the location will always be read with these options. #NOTE #EXAM_TIP
 -- MAGIC 
 -- MAGIC **NOTE**: When working with CSVs as a data source, it's important to ensure that column order does not change if additional data files will be added to the source directory. Because the data format does not have strong schema enforcement, Spark will load columns and apply column names and data types in the order specified during table declaration.
 -- MAGIC 
@@ -162,11 +166,11 @@ DESCRIBE EXTENDED sales_csv
 -- MAGIC 
 -- MAGIC ## Limits of Tables with External Data Sources
 -- MAGIC 
--- MAGIC If you've taken other courses on Databricks or reviewed any of our company literature, you may have heard about Delta Lake and the Lakehouse. Note that whenever we're defining tables or queries against external data sources, we **cannot** expect the performance guarantees associated with Delta Lake and Lakehouse.
+-- MAGIC If you've taken other courses on Databricks or reviewed any of our company literature, you may have heard about Delta Lake and the Lakehouse. Note that whenever we're defining tables or queries against external data sources, we **cannot** expect the performance guarantees associated with Delta Lake and Lakehouse. #NOTE #EXAM_TIP
 -- MAGIC 
 -- MAGIC For example: while Delta Lake tables will guarantee that you always query the most recent version of your source data, tables registered against other data sources may represent older cached versions.
 -- MAGIC 
--- MAGIC The cell below executes some logic that we can think of as just representing an external system directly updating the files underlying our table.
+-- MAGIC The cell below executes some logic that we can think of as just representing an external system directly updating the files underlying our table. 
 
 -- COMMAND ----------
 
@@ -199,7 +203,7 @@ SELECT COUNT(*) FROM sales_csv
 -- MAGIC 
 -- MAGIC Our external data source is not configured to tell Spark that it should refresh this data. 
 -- MAGIC 
--- MAGIC We **can** manually refresh the cache of our data by running the **`REFRESH TABLE`** command.
+-- MAGIC We **can** manually refresh the cache of our data by running the **`REFRESH TABLE`** command. #NOTE #EXAM_TIP
 
 -- COMMAND ----------
 
@@ -303,7 +307,7 @@ DESCRIBE EXTENDED users_jdbc
 -- MAGIC %md
 -- MAGIC 
 -- MAGIC 
--- MAGIC Note that some SQL systems such as data warehouses will have custom drivers. Spark will interact with various external databases differently, but the two basic approaches can be summarized as either:
+-- MAGIC Note that some SQL systems such as data warehouses will have custom drivers. Spark will interact with various external databases differently, but the two basic approaches can be summarized as either: #NOTE #EXAM_TIP
 -- MAGIC 1. Moving the entire source table(s) to Databricks and then executing logic on the currently active cluster
 -- MAGIC 1. Pushing down the query to the external SQL database and only transferring the results back to Databricks
 -- MAGIC 

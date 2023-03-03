@@ -88,7 +88,7 @@ SELECT count(*) FROM users_dirty WHERE email IS NULL;
 
 -- MAGIC %python 
 -- MAGIC from pyspark.sql.functions import col
--- MAGIC usersDF = spark.read.table("users_dirty")
+-- MAGIC usersDF = spark.read.table("users_dirty") #how to convert table to dataframe #NOTE #EXAM_TIP
 -- MAGIC 
 -- MAGIC usersDF.selectExpr("count_if(email IS NULL)")
 -- MAGIC usersDF.where(col("email").isNull()).count()
@@ -118,7 +118,7 @@ SELECT DISTINCT(*) FROM users_dirty
 -- MAGIC 
 -- MAGIC The code below uses **`GROUP BY`** to remove duplicate records based on **`user_id`** and **`user_first_touch_timestamp`** column values. (Recall that these fields are both generated when a given user is first encountered, thus forming unique tuples.)
 -- MAGIC 
--- MAGIC Here, we are using the aggregate function **`max`** as a hack to:
+-- MAGIC Here, we are using the aggregate function **`max`** as a hack to: #NOTE #EXAM_TIP
 -- MAGIC - Keep values from the **`email`** and **`updated`** columns in the result of our group by
 -- MAGIC - Capture non-null emails when multiple records are present
 
@@ -131,6 +131,10 @@ WHERE user_id IS NOT NULL
 GROUP BY user_id, user_first_touch_timestamp;
 
 SELECT count(*) FROM deduped_users
+
+-- COMMAND ----------
+
+select * from deduped_users
 
 -- COMMAND ----------
 
@@ -180,6 +184,12 @@ SELECT max(row_count) <= 1 no_duplicate_ids FROM (
   SELECT user_id, count(*) AS row_count
   FROM deduped_users
   GROUP BY user_id)
+
+-- COMMAND ----------
+
+SELECT user_id, count(*) AS row_count
+  FROM deduped_users
+  GROUP BY user_id
 
 -- COMMAND ----------
 
