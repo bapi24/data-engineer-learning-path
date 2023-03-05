@@ -64,7 +64,7 @@ DESCRIBE EXTENDED sales;
 -- MAGIC  
 -- MAGIC CTAS statements automatically infer schema information from query results and do **not** support manual schema declaration. 
 -- MAGIC 
--- MAGIC This means that CTAS statements are useful for external data ingestion from sources with well-defined schema, such as Parquet files and tables.
+-- MAGIC This means that CTAS statements are useful for external data ingestion from sources with well-defined schema, such as Parquet files and tables. #NOTE #EXAM_TIP 
 -- MAGIC 
 -- MAGIC CTAS statements also do not support specifying additional file options.
 -- MAGIC 
@@ -129,6 +129,8 @@ SELECT * FROM purchases
 -- MAGIC 
 -- MAGIC 
 -- MAGIC Note that we could have accomplished this same goal with a view, as shown below.
+-- MAGIC 
+-- MAGIC any advantage of use views over tables or vice-versa?? #ASK #NOTE #EXAM_TIP
 
 -- COMMAND ----------
 
@@ -145,7 +147,7 @@ SELECT * FROM purchases_vw
 -- MAGIC  
 -- MAGIC ## Declare Schema with Generated Columns
 -- MAGIC 
--- MAGIC As noted previously, CTAS statements do not support schema declaration. We note above that the timestamp column appears to be some variant of a Unix timestamp, which may not be the most useful for our analysts to derive insights. This is a situation where generated columns would be beneficial.
+-- MAGIC As noted previously, CTAS statements do not support schema declaration. We note above that the timestamp column appears to be some variant of a Unix timestamp, which may not be the most useful for our analysts to derive insights. This is a situation where generated columns would be beneficial. #NOTE #EXAM_TIP
 -- MAGIC 
 -- MAGIC Generated columns are a special type of column whose values are automatically generated based on a user-specified function over other columns in the Delta table (introduced in DBR 8.3).
 -- MAGIC 
@@ -161,7 +163,7 @@ CREATE OR REPLACE TABLE purchase_dates (
   transaction_timestamp STRING, 
   price STRING,
   date DATE GENERATED ALWAYS AS (
-    cast(cast(transaction_timestamp/1e6 AS TIMESTAMP) AS DATE))
+    cast(cast(transaction_timestamp/1e6 AS TIMESTAMP) AS DATE)) -- #ASK #NOTE #EXAM_TIP
     COMMENT "generated based on `transactions_timestamp` column")
 
 -- COMMAND ----------
@@ -195,6 +197,10 @@ WHEN NOT MATCHED THEN
 
 -- COMMAND ----------
 
+select * from sales
+
+-- COMMAND ----------
+
 SELECT * FROM purchase_dates
 
 -- COMMAND ----------
@@ -205,12 +211,12 @@ SELECT * FROM purchase_dates
 -- MAGIC 
 -- MAGIC It's important to note that if a field that would otherwise be generated is included in an insert to a table, this insert will fail if the value provided does not exactly match the value that would be derived by the logic used to define the generated column.
 -- MAGIC 
--- MAGIC We can see this error by uncommenting and running the cell below:
+-- MAGIC We can see this error by uncommenting and running the cell below: #NOTE #EXAM_TIP
 
 -- COMMAND ----------
 
--- INSERT INTO purchase_dates VALUES
--- (1, 600000000, 42.0, "2020-06-18")
+INSERT INTO purchase_dates VALUES
+(1, 600000000, 42.0, "2020-06-18")
 
 -- COMMAND ----------
 
@@ -240,7 +246,7 @@ ALTER TABLE purchase_dates ADD CONSTRAINT valid_date CHECK (date > '2020-01-01')
 -- MAGIC %md
 -- MAGIC 
 -- MAGIC 
--- MAGIC Table constraints are shown in the **`TBLPROPERTIES`** field.
+-- MAGIC Table constraints are shown in the **`TBLPROPERTIES`** field. #NOTE #EXAM_TIP #ASK
 
 -- COMMAND ----------
 
@@ -292,7 +298,7 @@ SELECT * FROM users_pii;
 -- MAGIC %md
 -- MAGIC 
 -- MAGIC  
--- MAGIC The metadata fields added to the table provide useful information to understand when records were inserted and from where. This can be especially helpful if troubleshooting problems in the source data becomes necessary.
+-- MAGIC The metadata fields added to the table provide useful information to understand when records were inserted and from where. This can be especially helpful if troubleshooting problems in the source data becomes necessary. #NOTE #EXAM_TIP
 -- MAGIC 
 -- MAGIC All of the comments and properties for a given table can be reviewed using **`DESCRIBE TABLE EXTENDED`**.
 -- MAGIC 
@@ -321,7 +327,7 @@ DESCRIBE EXTENDED users_pii
 -- MAGIC 
 -- MAGIC 
 -- MAGIC ## Cloning Delta Lake Tables
--- MAGIC Delta Lake has two options for efficiently copying Delta Lake tables.
+-- MAGIC Delta Lake has two options for efficiently copying Delta Lake tables. #NOTE #EXAM_TIP
 -- MAGIC 
 -- MAGIC **`DEEP CLONE`** fully copies data and metadata from a source table to a target. This copy occurs incrementally, so executing this command again can sync changes from the source to the target location.
 

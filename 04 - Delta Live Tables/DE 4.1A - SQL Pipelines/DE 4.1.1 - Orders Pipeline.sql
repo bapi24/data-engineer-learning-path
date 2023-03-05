@@ -50,7 +50,7 @@
 -- MAGIC 
 -- MAGIC Delta Live Tables adapts standard SQL queries to combine DDL (data definition language) and DML (data manipulation language) into a unified declarative syntax.
 -- MAGIC 
--- MAGIC There are two distinct types of persistent tables that can be created with DLT:
+-- MAGIC There are two distinct types of persistent tables that can be created with DLT: #NOTE #EXAM_TIP
 -- MAGIC * **Live tables** are materialized views for the lakehouse; they will return the current results of any query with each refresh
 -- MAGIC * **Streaming live tables** are designed for incremental, near-real time data processing
 -- MAGIC 
@@ -120,7 +120,7 @@ FROM cloud_files("${source}/orders", "json", map("cloudFiles.inferColumnTypes", 
 -- MAGIC 
 -- MAGIC ### Table Properties
 -- MAGIC 
--- MAGIC The **`TBLPROPERTIES`** field can be used to pass any number of key/value pairs for custom tagging of data. Here, we set the value **`silver`** for the key **`quality`**.
+-- MAGIC The **`TBLPROPERTIES`** field can be used to pass any number of key/value pairs for custom tagging of data. Here, we set the value **`silver`** for the key **`quality`**. #NOTE #EXAM_TIP
 -- MAGIC 
 -- MAGIC Note that while this field allows for custom tags to be arbitrarily set, it is also used for configuring number of settings that control how a table will perform. While reviewing table details, you may also encounter a number of settings that are turned on by default any time a table is created.
 

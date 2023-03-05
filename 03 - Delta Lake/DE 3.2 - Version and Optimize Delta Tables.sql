@@ -114,6 +114,7 @@ DESCRIBE EXTENDED students
 
 DESCRIBE DETAIL students
 
+
 -- COMMAND ----------
 
 -- MAGIC %md
@@ -151,6 +152,8 @@ DESCRIBE DETAIL students
 -- MAGIC Transactions to Delta Lake tables are recorded in the **`_delta_log`**.
 -- MAGIC 
 -- MAGIC We can peek inside the **`_delta_log`** to see more.
+-- MAGIC 
+-- MAGIC what are `.crc` files in `_delta_log`? #NOTE #EXAM_TIP
 
 -- COMMAND ----------
 
@@ -186,7 +189,7 @@ DESCRIBE DETAIL students
 -- MAGIC 
 -- MAGIC Here we see that our table currently contains 4 data files in its present version. So what are all those other Parquet files doing in our table directory? 
 -- MAGIC 
--- MAGIC Rather than overwriting or immediately deleting files containing changed data, Delta Lake uses the transaction log to indicate whether or not files are valid in a current version of the table.
+-- MAGIC Rather than overwriting or immediately deleting files containing changed data, Delta Lake uses the transaction log to indicate whether or not files are valid in a current version of the table. #NOTE #EXAM_TIP
 -- MAGIC 
 -- MAGIC Here, we'll look at the transaction log corresponding the **`MERGE`** statement above, where records were inserted, updated, and deleted.
 
@@ -211,7 +214,9 @@ DESCRIBE DETAIL students
 -- MAGIC 
 -- MAGIC ## Compacting Small Files and Indexing
 -- MAGIC 
--- MAGIC Small files can occur for a variety of reasons; in our case, we performed a number of operations where only one or several records were inserted.
+-- MAGIC 
+-- MAGIC 
+-- MAGIC Small files can occur for a variety of reasons; in our case, we performed a number of operations where only one or several records were inserted. #NOTE #EXAM_TIP
 -- MAGIC 
 -- MAGIC Files will be combined toward an optimal size (scaled based on the size of the table) by using the **`OPTIMIZE`** command.
 -- MAGIC 
@@ -255,7 +260,7 @@ DESCRIBE HISTORY students
 -- MAGIC 
 -- MAGIC These time travel queries can be performed by specifying either the integer version or a timestamp.
 -- MAGIC 
--- MAGIC **NOTE**: In most cases, you'll use a timestamp to recreate data at a time of interest. For our demo we'll use version, as this is deterministic (whereas you may be running this demo at any time in the future).
+-- MAGIC **NOTE**: In most cases, you'll use a timestamp to recreate data at a time of interest. For our demo we'll use version, as this is deterministic (whereas you may be running this demo at any time in the future). #NOTE #EXAM_TIP
 
 -- COMMAND ----------
 
@@ -300,7 +305,7 @@ SELECT * FROM students
 -- MAGIC %md
 -- MAGIC 
 -- MAGIC 
--- MAGIC Deleting all the records in your table is probably not a desired outcome. Luckily, we can simply rollback this commit.
+-- MAGIC Deleting all the records in your table is probably not a desired outcome. Luckily, we can simply rollback this commit. #NOTE #EXAM_TIP
 
 -- COMMAND ----------
 
@@ -325,13 +330,14 @@ RESTORE TABLE students TO VERSION AS OF 8
 -- MAGIC 
 -- MAGIC While Delta Lake versioning and time travel are great for querying recent versions and rolling back queries, keeping the data files for all versions of large production tables around indefinitely is very expensive (and can lead to compliance issues if PII is present).
 -- MAGIC 
--- MAGIC If you wish to manually purge old data files, this can be performed with the **`VACUUM`** operation.
+-- MAGIC If you wish to manually purge old data files, this can be performed with the **`VACUUM`** operation. #NOTE #EXAM_TIP
 -- MAGIC 
 -- MAGIC Uncomment the following cell and execute it with a retention of **`0 HOURS`** to keep only the current version:
 
 -- COMMAND ----------
 
--- VACUUM students RETAIN 0 HOURS
+VACUUM students RETAIN 0 HOURS
+
 
 -- COMMAND ----------
 
@@ -347,7 +353,7 @@ RESTORE TABLE students TO VERSION AS OF 8
 
 -- COMMAND ----------
 
-SET spark.databricks.delta.retentionDurationCheck.enabled = false;
+SET spark.databricks.delta.retentionDurationCheck.enabled = false; #NOTE #EXAM_TIP
 SET spark.databricks.delta.vacuum.logging.enabled = true;
 
 VACUUM students RETAIN 0 HOURS DRY RUN
@@ -362,6 +368,7 @@ VACUUM students RETAIN 0 HOURS DRY RUN
 -- COMMAND ----------
 
 VACUUM students RETAIN 0 HOURS
+
 
 -- COMMAND ----------
 

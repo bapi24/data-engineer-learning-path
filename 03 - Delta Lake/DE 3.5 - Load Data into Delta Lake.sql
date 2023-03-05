@@ -112,8 +112,8 @@ DESCRIBE HISTORY sales
 
 -- COMMAND ----------
 
--- INSERT OVERWRITE sales
--- SELECT *, current_timestamp() FROM parquet.`${da.paths.datasets}/ecommerce/raw/sales-historical`
+INSERT OVERWRITE sales
+SELECT *, current_timestamp() FROM parquet.`${da.paths.datasets}/ecommerce/raw/sales-historical`
 
 -- COMMAND ----------
 
@@ -131,6 +131,11 @@ DESCRIBE HISTORY sales
 
 INSERT INTO sales
 SELECT * FROM parquet.`${da.paths.datasets}/ecommerce/raw/sales-30m`
+
+
+-- COMMAND ----------
+
+select count(*) from sales
 
 -- COMMAND ----------
 
@@ -171,7 +176,7 @@ FROM parquet.`${da.paths.datasets}/ecommerce/raw/users-30m`
 -- MAGIC %md
 -- MAGIC 
 -- MAGIC  
--- MAGIC The main benefits of **`MERGE`**:
+-- MAGIC The main benefits of **`MERGE`**: #NOTE #EXAM_TIP
 -- MAGIC * updates, inserts, and deletes are completed as a single transaction
 -- MAGIC * multiple conditionals can be added in addition to matching fields
 -- MAGIC * provides extensive options for implementing custom logic
@@ -188,6 +193,17 @@ ON a.user_id = b.user_id
 WHEN MATCHED AND a.email IS NULL AND b.email IS NOT NULL THEN
   UPDATE SET email = b.email, updated = b.updated
 WHEN NOT MATCHED THEN INSERT *
+
+-- ---
+-- (5) Spark Jobs
+-- Error in SQL statement: DeltaUnsupportedOperationException: Cannot perform Merge as multiple source rows matched and attempted to modify the same
+-- target row in the Delta table in possibly conflicting ways. By SQL semantics of Merge,
+-- when multiple source rows match on the same target row, the result may be ambiguous
+-- as it is unclear which source row should be used to update or delete the matching
+-- target row. You can preprocess the source table to eliminate the possibility of
+-- multiple matches. Please refer to
+-- https://docs.gcp.databricks.com/delta/delta-update.html#upsert-into-a-table-using-merge
+-- Command took 3.47 seconds -- by devbabai707@gmail.com at 3/3/2023, 4:30:43 PM on dev babai's Cluster
 
 -- COMMAND ----------
 
@@ -209,7 +225,7 @@ WHEN NOT MATCHED THEN INSERT *
 -- MAGIC 
 -- MAGIC This optimized command uses the same **`MERGE`** syntax but only provided a **`WHEN NOT MATCHED`** clause.
 -- MAGIC 
--- MAGIC Below, we use this to confirm that records with the same **`user_id`** and **`event_timestamp`** aren't already in the **`events`** table.
+-- MAGIC Below, we use this to confirm that records with the same **`user_id`** and **`event_timestamp`** aren't already in the **`events`** table. #NOTE #EXAM_TIP
 
 -- COMMAND ----------
 
@@ -232,7 +248,7 @@ WHEN NOT MATCHED AND b.traffic_source = 'email' THEN
 -- MAGIC - Data schema should be consistent
 -- MAGIC - Duplicate records should try to be excluded or handled downstream
 -- MAGIC 
--- MAGIC This operation is potentially much cheaper than full table scans for data that grows predictably.
+-- MAGIC This operation is potentially much cheaper than full table scans for data that grows predictably. #NOTE #EXAM_TIP
 -- MAGIC 
 -- MAGIC While here we'll show simple execution on a static directory, the real value is in multiple executions over time picking up new files in the source automatically.
 

@@ -161,12 +161,13 @@ AS SELECT state, count(*) as customer_count, current_timestamp() updated_at
 -- MAGIC 
 -- MAGIC The query below defines a DLT view by replacing **`TABLE`** with the **`VIEW`** keyword.
 -- MAGIC 
--- MAGIC Views in DLT differ from persisted tables, and can optionally be defined as **`STREAMING`**.
+-- MAGIC - Views in DLT differ from persisted tables, and can optionally be defined as **`STREAMING`**.
 -- MAGIC 
--- MAGIC Views have the same update guarantees as live tables, but the results of queries are not stored to disk.
+-- MAGIC - Views have the same update guarantees as live tables, but the results of queries are not stored to disk.
 -- MAGIC 
--- MAGIC Unlike views used elsewhere in Databricks, DLT views are not persisted to the metastore, meaning that they can only be referenced from within the DLT pipeline they are a part of. (This is similar scoping to temporary views in most SQL systems.)
--- MAGIC 
+-- MAGIC - Unlike views used elsewhere in Databricks, DLT views are not persisted to the metastore, meaning that they can only be referenced from within the DLT pipeline they are a part of. (This is similar scoping to temporary views in most SQL systems.)
+-- MAGIC  #NOTE #EXAM_TIP
+-- MAGIC  
 -- MAGIC Views can still be used to enforce data quality, and metrics for views will be collected and reported as they would be for tables.
 -- MAGIC 
 -- MAGIC ## Joins and Referencing Tables Across Notebook Libraries

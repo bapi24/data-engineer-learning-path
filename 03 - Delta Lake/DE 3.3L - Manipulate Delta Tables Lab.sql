@@ -103,7 +103,7 @@ WHEN NOT MATCHED AND b.delicious = true THEN
 -- COMMAND ----------
 
 -- TODO
-<FILL-IN>
+DESCRIBE HISTORY BEANS
 
 -- COMMAND ----------
 
@@ -169,7 +169,8 @@ SELECT * FROM beans
 
 -- TODO
 CREATE OR REPLACE TEMP VIEW pre_delete_vw AS
-<FILL-IN>
+select * from beans version as of 4
+
 
 -- COMMAND ----------
 
@@ -203,7 +204,7 @@ SELECT * FROM pre_delete_vw
 -- COMMAND ----------
 
 -- TODO
-<FILL-IN>
+RESTORE TABLE beans TO VERSION AS OF 5
 
 -- COMMAND ----------
 
@@ -238,7 +239,8 @@ DESCRIBE HISTORY beans
 -- COMMAND ----------
 
 -- TODO
-<FILL-IN>
+OPTIMIZE beans
+ZORDER BY name
 
 -- COMMAND ----------
 
@@ -355,14 +357,14 @@ SELECT * FROM beans
 -- MAGIC 
 -- MAGIC <img src="https://files.training.databricks.com/images/icon_warn_32.png"> Because Delta Cache stores copies of files queried in the current session on storage volumes deployed to your currently active cluster, you may still be able to temporarily access previous table versions (though systems should **not** be designed to expect this behavior). 
 -- MAGIC 
--- MAGIC Restarting the cluster will ensure that these cached data files are permanently purged.
+-- MAGIC Restarting the cluster will ensure that these cached data files are permanently purged. #NOTE #EXAM_TIP
 -- MAGIC 
 -- MAGIC You can see an example of this by uncommenting and running the following cell that may, or may not, fail
 -- MAGIC (depending on the state of the cache).
 
 -- COMMAND ----------
 
--- SELECT * FROM beans@v1
+SELECT * FROM beans@v1
 
 -- COMMAND ----------
 
