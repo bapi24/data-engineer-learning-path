@@ -138,7 +138,7 @@ SELECT * FROM patient_gold.heartrate_stats;
 
 -- COMMAND ----------
 
--- GRANT SELECT ON TABLE patient_gold.heartrate_stats to `analysts`
+GRANT SELECT ON TABLE patient_gold.heartrate_stats to `analysts`
 
 -- COMMAND ----------
 

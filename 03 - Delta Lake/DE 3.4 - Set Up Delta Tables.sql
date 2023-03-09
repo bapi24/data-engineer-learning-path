@@ -123,6 +123,16 @@ FROM sales;
 
 SELECT * FROM purchases
 
+
+-- COMMAND ----------
+
+select count(*) from purchases;
+
+
+-- COMMAND ----------
+
+insert into purchases values(290000, '1592199956703494', 1000)
+
 -- COMMAND ----------
 
 -- MAGIC %md
@@ -181,10 +191,18 @@ CREATE OR REPLACE TABLE purchase_dates (
 SET spark.databricks.delta.schema.autoMerge.enabled=true; 
 
 MERGE INTO purchase_dates a
-USING purchases b
+USING purchases_vw b
 ON a.id = b.id
 WHEN NOT MATCHED THEN
   INSERT *
+
+-- COMMAND ----------
+
+select * from purchase_dates;
+
+-- COMMAND ----------
+
+select count(*) from purchase_dates;
 
 -- COMMAND ----------
 
@@ -215,8 +233,16 @@ SELECT * FROM purchase_dates
 
 -- COMMAND ----------
 
+describe extended purchase_dates
+
+-- COMMAND ----------
+
 INSERT INTO purchase_dates VALUES
 (1, 600000000, 42.0, "2020-06-18")
+
+-- COMMAND ----------
+
+insert into purchase_dates values(290001, '1592199956703495', 1000, "2020-06-18")
 
 -- COMMAND ----------
 
@@ -295,6 +321,20 @@ SELECT * FROM users_pii;
 
 -- COMMAND ----------
 
+CREATE OR REPLACE TABLE users_pii_managed
+COMMENT "Contains PII"
+PARTITIONED BY (first_touch_date)
+AS
+  SELECT *, 
+    cast(cast(user_first_touch_timestamp/1e6 AS TIMESTAMP) AS DATE) first_touch_date, 
+    current_timestamp() updated,
+    input_file_name() source_file
+  FROM parquet.`${da.paths.datasets}/ecommerce/raw/users-historical/`;
+  
+SELECT * FROM users_pii_managed;
+
+-- COMMAND ----------
+
 -- MAGIC %md
 -- MAGIC 
 -- MAGIC  
@@ -307,6 +347,10 @@ SELECT * FROM users_pii;
 -- COMMAND ----------
 
 DESCRIBE EXTENDED users_pii
+
+-- COMMAND ----------
+
+DESCRIBE EXTENDED users_pii_managed
 
 -- COMMAND ----------
 
